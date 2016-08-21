@@ -10,7 +10,7 @@ export const makeMainRoutes = () => {
       {/* Lazy-loading */}
       <Route path="login" getComponent={(location, cb) => {
           require.ensure([], (require) => {
-            const mod = require('./login/Login');
+            const mod = require('components/Login/Login');
             cb(null, mod.default);
           });
         }} />

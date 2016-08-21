@@ -16,7 +16,7 @@ export class Container extends React.Component {
     return (
       <Grid fluid={true}>
         <Row>
-          <Col lg={8} lgOffset={2} md={8} mdOffset={2} xs={10} xsoffset={1} >
+          <Col lg={8} lgOffset={2} md={8} mdOffset={2} xs={10} xsOffset={1} >
               <Header tite="play" />
               <div className={styles.content}>
                 {this.renderChildren()}
