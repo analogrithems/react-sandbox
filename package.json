@@ -16,6 +16,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "font-awesome": "^4.6.3",
+    "dd": "git://github.com/drdelambre/drdelambre.git#es6",
     "react": "^15.3.0",
     "react-bootstrap": "^0.30.2",
     "react-common": "^1.1.0",
