@@ -14,14 +14,15 @@ let Auth = (data) =>{
         updatedAt: ''
     }).fill(data);
 
-    self.login = (email,password) => {
-        self.email = email;
-        self.password = password;
+    self.login = (email,password,rememberMe) => {
+
+
 
         Ajax({
             data: {
-                email: self.email,
-                password: self.password
+                email,
+                password,
+                rememberMe,
             },
             method: 'POST',
             url: baseurl+'/auth/login',

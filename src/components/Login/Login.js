@@ -10,31 +10,66 @@ class ColorGraph extends React.Component {
   }
 }
 
+const LoginAlert = React.createClass({
+  getInitialState() {
+    return {
+      alertVisible: false
+    };
+  },
+
+  render() {
+    if (this.state.alertVisible) {
+      return (
+        <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+          <h4>Login Error!</h4>
+          <p>Username or Password invalid! Although this might just be a bad day for you.  Perhaps this is revenge for something you did in high school...</p>
+        </Alert>
+      );
+    }else{
+      return (<div> </div>)
+    }
+  },
+
+  handleAlertDismiss() {
+    this.setState({alertVisible: false});
+  },
+
+  handleAlertShow() {
+    this.setState({alertVisible: true});
+  }
+});
 
 export default class Login extends React.Component {
 
-  state = { email: '', password: '', rememberMe: false };
-
-
-  emailValueLink = (value) => {
-      return {
-          value: this.state.email,
-          requestChange: this.handleEmailChange
-      };
+  getInitialState() {
+    return {
+      error: false
+    }
   }
 
-  handleChange = (name, value) => {
-    this.setState({...this.state, [name]: value});
-  };
+  handleSubmit(event) {
+    event.preventDefault()
 
-  // This will be called when the user clicks on the login button
-  login(e) {
-    e.preventDefault();
-    // Here, we call an external AuthService. We'll create it in the next step
-    Auth.login(this.state.email, this.state.password)
-      .catch(function(err) {
-        console.log("Error logging in", err);
-      });
+    const email = this.refs.email.value
+    const pass = this.refs.pass.value
+    const rememberMe = this.refs.rememberMe.value
+
+    
+    Auth.login( email, pass, rememberMe, (loggedIn) => {
+      if (!loggedIn)
+        LoginAlert.handleAlertShow();
+
+      const { location } = this.props
+
+      if (location.state && location.state.nextPathname) {
+        this.props.router.replace(location.state.nextPathname)
+      } else {
+        this.props.router.replace('/')
+      }
+
+    }).catch(function(err) {
+      console.log("Error logging in", err);
+    });
   }
 
   render() {
@@ -45,21 +80,22 @@ export default class Login extends React.Component {
       		  <fieldset>
         			<h2>Please Sign In</h2>
         			<ColorGraph />
+              <LoginAlert />
         			<FormGroup>
-        			  <FormControl type="email" placeholder="Email" tabIndex="4" value={this.state.email} onChange={this.handleChange.bind(this, 'email')}  />
+        			  <FormControl type="email" placeholder="Email" tabIndex="4" ref="email"  />
         			</FormGroup>
     					<FormGroup>
-                <FormControl type="password" name="password" id="password" placeholder="Password" tabIndex="5" value={this.state.password} onChange={this.handleChange.bind(this, 'password')} />
+                <FormControl type="password" name="password" id="password" placeholder="Password" tabIndex="5" ref="pass"/>
     					</FormGroup>
     					<span className="button-checkbox">
         				<Button>
-        				  <Checkbox name="rememberMe" id="rememberMe" value="1" tabIndex="7" checked={this.state.rememberMe} onChange={this.handleChange.bind(this, 'rememberMe')}>Remember Me</Checkbox>
+        				  <Checkbox name="rememberMe" ref="rememberMe" value="1" tabIndex="6" >Remember Me</Checkbox>
         				</Button>
       				</span>  			
         			<ColorGraph />
         			<Row>
         				<Col xs={12} md={6}>
-        				  <Button tabIndex="8" bsStyle="success" onClick={this.login.bind(this)} >Sign In</Button>
+        				  <Button tabIndex="8" bsStyle="success">Sign In</Button>
         				</Col>
         			</Row>
       			</fieldset>
