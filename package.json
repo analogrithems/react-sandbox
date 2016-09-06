@@ -1,5 +1,5 @@
 {
-  "name": "common",
+  "name": "takes-a-village_react-front",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -12,7 +12,7 @@
     "test:watch": "npm run test -- --watch"
   },
   "author": "Analogrithems <analogrithems@gmail.com>",
-  "license": "ISC",
+  "license": "OpenSourcePimp",
   "dependencies": {
     "classnames": "^2.2.5",
     "dd": "git://github.com/drdelambre/drdelambre.git#es6",

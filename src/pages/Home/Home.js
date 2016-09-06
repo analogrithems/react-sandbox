@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 import styles from './styles.module.css';
 
-export class MarketingHome extends React.Component {
+export class Home extends React.Component {
   render() {
     return (
       <div className={styles.content}>
@@ -22,4 +22,4 @@ export class MarketingHome extends React.Component {
   }
 }
 
-export default MarketingHome;
+export default Home;

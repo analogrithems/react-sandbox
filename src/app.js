@@ -1,20 +1,59 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
+import { Router, Route, Link, hashHistory } from 'react-router'
+
+import apiConf from './configs/apiConf'
 
 import 'font-awesome/css/font-awesome.css'
 import 'styles/bootstrap-theme.scss'
 import 'styles/bootstrap.scss'
 import './app.css'
 
-import App from 'containers/App/App'
 
-import {hashHistory} from 'react-router'
-import makeRoutes from './routes'
+/*
+*  Table of Contents - In our Single Page application
+*
+*/
+import About from 'pages/About/About'
+import App from 'pages/App/App'
+import Dashboard from 'pages/Dashboard/Dashboard'
+import Login from 'pages/Login/Login'
+import Home from 'pages/Home/Home'
+import Profile from 'pages/Profile/Profile'
+import Project from 'pages/Project/Project'
+import Signup from 'pages/Signup/Signup'
 
-const routes = makeRoutes()
+const routes = {
+  path: '/'
+  ,component: App
+  ,indexRoute: { component: Home }
+  ,childRoutes: [
+    { path: 'about', component: About }
+    ,{ path: 'login', component: Login }
+    ,{ path: 'signup', component: Signup }
+    ,{
+      path: 'dashboard'
+      ,component: Dashboard
+      ,childRoutes: [
+        {
+          path: 'profile', component: Profile 
+        }
+        ,{
+          path: 'project/:id'
+          ,component: Project
+          ,childRoutes: []
+        }
+      ]
+    }
+  ]
+};
+
+const configs = {
+  apiConf
+};
 
 const mountNode = document.querySelector('#root');
-ReactDOM.render(
-  <App history={hashHistory}
-        routes={routes} />,
-mountNode);
+
+// Start The Show
+render(<Router routes={routes} history={hashHistory} />, mountNode)
+

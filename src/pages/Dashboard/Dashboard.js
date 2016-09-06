@@ -1,9 +1,9 @@
 import React, { PropTypes as T } from 'react'
 import {Col,  Grid, Row } from 'react-bootstrap';
-import Header from 'components/Header/Header'
+import Header from './Header'
 import styles from './styles.module.css'
 
-export class Container extends React.Component {
+export class Dashboard extends React.Component {
   renderChildren() {
     const childProps = {
       ...this.props
@@ -17,7 +17,7 @@ export class Container extends React.Component {
       <Grid fluid={true}>
         <Row>
           <Col lg={8} lgOffset={2} md={8} mdOffset={2} xs={10} xsOffset={1} >
-              <Header tite="play" />
+              <Header title="Tasker" />
               <div className={styles.content}>
                 {this.renderChildren()}
               </div>
@@ -28,8 +28,8 @@ export class Container extends React.Component {
   }
 }
 
-Container.contextTypes = {
+Dashboard.contextTypes = {
   router: T.object
 }
 
-export default Container
+export default Dashboard

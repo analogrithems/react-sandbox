@@ -10,7 +10,7 @@ class ColorGraph extends React.Component {
 }
 
 
-export default class Login extends React.Component {
+export default class Signup extends React.Component {
 
   model = {
     username: 'string',

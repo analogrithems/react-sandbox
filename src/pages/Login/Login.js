@@ -1,5 +1,6 @@
 import React from 'react';
-import Auth from './Auth.js'
+import ReactDOM from 'react-dom';
+import Auth from './Auth'
 import { Button, Checkbox, Col, FormControl, FormGroup, Row } from 'react-bootstrap';
 
 class ColorGraph extends React.Component {
@@ -11,16 +12,11 @@ class ColorGraph extends React.Component {
 }
 
 const LoginAlert = React.createClass({
-  getInitialState() {
-    return {
-      alertVisible: false
-    };
-  },
-
-  render() {
-    if (this.state.alertVisible) {
+  
+  render: function (){
+    if (this.props.alertVisible) {
       return (
-        <Alert bsStyle="danger" onDismiss={this.handleAlertDismiss}>
+        <Alert bsStyle="danger" onDismiss={this.props.handleAlertDismiss}>
           <h4>Login Error!</h4>
           <p>Username or Password invalid! Although this might just be a bad day for you.  Perhaps this is revenge for something you did in high school...</p>
         </Alert>
@@ -28,36 +24,42 @@ const LoginAlert = React.createClass({
     }else{
       return (<div> </div>)
     }
-  },
-
-  handleAlertDismiss() {
-    this.setState({alertVisible: false});
-  },
-
-  handleAlertShow() {
-    this.setState({alertVisible: true});
   }
 });
 
-export default class Login extends React.Component {
+export class Login extends React.Component {
+ state = {
+    alertVisible: false
+  }
 
-  getInitialState() {
-    return {
-      error: false
-    }
+  constructor() {
+    super();
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAlertDismiss = this.handleAlertDismiss.bind(this);
+  }
+
+  handleAlertDismiss() {
+    this.setState({alertVisible: false});
   }
 
   handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const email = this.refs.email.value
-    const pass = this.refs.pass.value
-    const rememberMe = this.refs.rememberMe.value
+    const email = ReactDOM.findDOMNode(this.refs.email).value.trim();
+    const pass = ReactDOM.findDOMNode(this.refs.pass).value.trim();
+    const rememberMe = ReactDOM.findDOMNode(this.refs.rememberMe).value;
 
+    if (!email || !pass) {
+      this.setState({alertVisible: true});
+    }else{
+      this.setState({alertVisible: false});
+    }
     
-    Auth.login( email, pass, rememberMe, (loggedIn) => {
-      if (!loggedIn)
-        LoginAlert.handleAlertShow();
+    var auth = new Auth();
+    auth.login( email, pass, rememberMe, (err,authUser) => {
+      if (err){
+        this.setState({alertVisible: true});
+      }
 
       const { location } = this.props
 
@@ -69,6 +71,7 @@ export default class Login extends React.Component {
 
     }).catch(function(err) {
       console.log("Error logging in", err);
+      this.setState({alertVisible: true});
     });
   }
 
@@ -80,7 +83,7 @@ export default class Login extends React.Component {
       		  <fieldset>
         			<h2>Please Sign In</h2>
         			<ColorGraph />
-              <LoginAlert />
+              <LoginAlert alertVisible={this.state.alertVisible} handleAlertDismiss={this.state.handleAlertDismiss}/>
         			<FormGroup>
         			  <FormControl type="email" placeholder="Email" tabIndex="4" ref="email"  />
         			</FormGroup>
@@ -95,7 +98,7 @@ export default class Login extends React.Component {
         			<ColorGraph />
         			<Row>
         				<Col xs={12} md={6}>
-        				  <Button tabIndex="8" bsStyle="success">Sign In</Button>
+        				  <Button tabIndex="8" bsStyle="success" onClick={this.handleSubmit}>Sign In</Button>
         				</Col>
         			</Row>
       			</fieldset>
@@ -105,3 +108,6 @@ export default class Login extends React.Component {
     );
   }
 }
+
+
+export default Login
